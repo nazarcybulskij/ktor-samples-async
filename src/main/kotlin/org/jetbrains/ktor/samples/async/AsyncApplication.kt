@@ -14,33 +14,24 @@ fun Application.main() {
     install(DefaultHeaders)
     install(CallLogging)
     install(Routing) {
-        get("/{...}") {
+        get("/time") {
             val start = System.currentTimeMillis()
-            defer(executor.toCoroutineDispatcher()) {
-                call.handleLongCalculation(start)
-            }.await()
+            call.handleLongCalculation(start)
         }
     }
 }
 
 private suspend fun ApplicationCall.handleLongCalculation(start: Long) {
-    val queue = System.currentTimeMillis() - start
-    var number = 0
-    val random = Random()
-    for (index in 0..300) {
-        delay(10)
-        number += random.nextInt(100)
-    }
-
     val time = System.currentTimeMillis() - start
     respondHtml {
         head {
-            title { +"Async World" }
+            title { +"Hello World" }
         }
         body {
             h1 {
-                +"We calculated this after ${time}ms (${queue}ms in queue): $number"
+                +"start ${time}"
             }
         }
     }
 }
+
